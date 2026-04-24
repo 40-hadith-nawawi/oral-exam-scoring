@@ -117,7 +117,8 @@
             <i class="fa-solid fa-circle-exclamation"
                 style="font-size: 3rem; color: var(--accent); margin-bottom: 15px;"></i>
             <h2 style="color: var(--dark-purple);">رابط غير صالح</h2>
-            <p style="line-height: 30px;">عذراً، يبدو أن الرابط المستخدم غير صحيح. يرجى التأكد من الدخول عبر الروابط الرسمية</p>
+            <p style="line-height: 30px;">عذراً، يبدو أن الرابط المستخدم غير صحيح. يرجى التأكد من الدخول عبر الروابط
+                الرسمية</p>
         </div>
     </div>
 
@@ -134,6 +135,12 @@
             if (fullUrl.includes('hifz')) mode = "hifz";
             else if (fullUrl.includes('sharh')) mode = "sharh";
 
+            let admin_mode = "";
+            if (fullUrl.includes('ad_change_password')) admin_mode = "ad_change_password";
+            else if (fullUrl.includes('admin_results')) admin_mode = "admin_results";
+            else if (fullUrl.includes('admin_dashboard')) admin_mode = "admin_dashboard";
+            else if (fullUrl.includes('admin_teacher')) admin_mode = "admin_teacher";
+
             if (mode !== "") {
                 iframe.src = GAS_DEPLOY_URL + "?lajna=" + mode;
 
@@ -145,7 +152,20 @@
                         iframe.style.display = 'block';
                     }, 600);
                 };
-            } else {
+            }
+            else if (admin_mode !== "") {
+                iframe.src = GAS_DEPLOY_URL + "?mode=" + admin_mode;
+
+                iframe.onload = function () {
+                    loader.style.transition = "opacity 0.6s ease";
+                    loader.style.opacity = "0";
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                        iframe.style.display = 'block';
+                    }, 600);
+                };
+            }
+            else {
                 loader.style.display = 'none';
                 errorContainer.style.display = 'flex';
             }
