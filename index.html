@@ -5,14 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تقدير درجات الاختبار الشفهي للأربعين النووية للكبار</title>
-    <link rel="icon" href="https://img.icons8.com/ios-filled/50/b8860b/open-book.png" type="image/png">
-
+    <link rel="icon" href="https://img.icons8.com/ios-filled/50/bfa05a/open-book.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
         :root {
-            --accent: #b8860b;
-            --off-white: #fcfcfc;
+            --primary-grad: linear-gradient(135deg, #4a1f59 0%, #7a3a8e 100%);
+            --accent-grad: linear-gradient(135deg, #bfa05a 0%, #d4bc82 100%);
+            --accent: #bfa05a;
+            --bg: #fdfcf9;
             --dark-purple: #4a1f59;
+            --sidebar-width: 260px;
         }
 
         body,
@@ -21,21 +24,22 @@
             padding: 0;
             height: 100%;
             width: 100%;
-            background-color: var(--off-white);
-            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            font-family: 'Segoe UI', Tahoma, sans-serif;
             overflow: hidden;
         }
 
         #loader {
             position: fixed;
             inset: 0;
-            background: rgba(252, 252, 252, 0.9);
+            background: rgba(252, 252, 252, 0.95);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 9999;
             backdrop-filter: blur(5px);
+            transition: opacity 0.5s ease;
         }
 
         .spinner {
@@ -69,20 +73,6 @@
             }
         }
 
-        .loading-text {
-            margin-top: 20px;
-            color: var(--dark-purple);
-            font-weight: 500;
-            font-size: 1rem;
-        }
-
-        #mainIframe {
-            border: none;
-            width: 100%;
-            height: 100vh;
-            display: none;
-        }
-
         #errorContainer {
             display: none;
             flex-direction: column;
@@ -90,15 +80,150 @@
             justify-content: center;
             height: 100vh;
             text-align: center;
+            background: var(--bg);
         }
 
         .error-card {
             background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--accent);
-            border-bottom: 4px solid var(--accent);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+            border-bottom: 5px solid var(--accent);
+            max-width: 400px;
+        }
+
+        .admin-layout {
+            display: none;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        #sidebar {
+            width: var(--sidebar-width);
+            background: var(--primary-grad);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 3px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link {
+            padding: 18px 25px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.3s;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .nav-link i {
+            margin-left: 15px;
+            font-size: 1.1rem;
+            width: 25px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent);
+            border-right: 4px solid var(--accent);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            height: 70px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+
+            h3 {
+                color: var(--dark-purple);
+            }
+        }
+
+        #mainIframe {
+            border: none;
+            flex: 1;
+            width: 100%;
+        }
+
+        #mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 70px;
+            background: white;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+            border-top: 1px solid #eee;
+        }
+
+        .mobile-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+
+        .mobile-btn i {
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+        }
+
+        .mobile-btn.active {
+            color: var(--dark-purple);
+            font-weight: bold;
+        }
+
+        @media (max-width: 950px) {
+            #sidebar {
+                display: none;
+            }
+
+            #mobile-nav {
+                display: flex;
+            }
+
+            .admin-layout {
+                padding-bottom: 70px;
+            }
+
+            header {
+                background: var(--primary-grad);
+
+                h3 {
+                    color: #fff;
+                }
+            }
+        }
+
+        body.fullscreen-mode #sidebar,
+        body.fullscreen-mode #mobile-nav,
+        body.fullscreen-mode header {
+            display: none !important;
         }
     </style>
 </head>
@@ -107,64 +232,129 @@
 
     <div id="loader">
         <div class="spinner"></div>
-        <div class="loading-text">جاري التحميل...</div>
+        <div style="margin-top: 20px; color: var(--dark-purple); font-weight: 500;">جاري تحميل البيانات...</div>
     </div>
-
-    <iframe id="mainIframe" src=""></iframe>
 
     <div id="errorContainer">
         <div class="error-card">
             <i class="fa-solid fa-circle-exclamation"
                 style="font-size: 3rem; color: var(--accent); margin-bottom: 15px;"></i>
-            <h2 style="color: var(--dark-purple);">رابط غير صالح</h2>
-            <p style="line-height: 30px;">عذراً، يبدو أن الرابط المستخدم غير صحيح. يرجى التأكد من الدخول عبر الروابط
-                الرسمية</p>
+            <h2 style="color: var(--dark-purple); margin-top:0;">رابط غير صالح</h2>
+            <p style="line-height: 1.6; color: #666;">عذراً، يبدو أن الرابط المستخدم غير صحيح. يرجى التأكد من الدخول عبر
+                الروابط الرسمية للنظام.</p>
         </div>
+    </div>
+
+    <div class="admin-layout" id="appLayout">
+        <aside id="sidebar">
+            <div class="sidebar-header">
+                <img src="https://img.icons8.com/ios-filled/100/ffffff/open-book.png" width="40" alt="Logo">
+                <div style="margin-top:10px; font-weight: bold; letter-spacing: 1px;">قسم الإدارة</div>
+            </div>
+            <nav style="margin-top: 20px;">
+                <div class="nav-link" onclick="navigateTo('admin_dashboard')" id="link-dashboard">
+                    <i class="fa-solid fa-chart-line"></i> الإحصائيات
+                </div>
+                <div class="nav-link" onclick="navigateTo('admin_results')" id="link-results">
+                    <i class="fa-solid fa-square-poll-vertical"></i> النتائج
+                </div>
+                <div class="nav-link" onclick="navigateTo('ad_change_password')" id="link-password">
+                    <i class="fa-solid fa-user-lock"></i> الأمان
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <h3 id="header-title" style="margin:0; font-size: 1.1rem;">الرئيسية</h3>
+                <div
+                    style="background: var(--accent-grad); padding: 5px 12px; border-radius: 8px; color: white; font-size: 0.8rem;">
+                    مسؤول النظام
+                </div>
+            </header>
+            <iframe id="mainIframe"></iframe>
+        </main>
+
+        <nav id="mobile-nav">
+            <div class="mobile-btn" onclick="navigateTo('admin_dashboard')" id="m-link-dashboard">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>الرئيسية</span>
+            </div>
+            <div class="mobile-btn" onclick="navigateTo('admin_results')" id="m-link-results">
+                <i class="fa-solid fa-square-poll-vertical"></i>
+                <span>النتائج</span>
+            </div>
+            <div class="mobile-btn" onclick="navigateTo('ad_change_password')" id="m-link-password">
+                <i class="fa-solid fa-user-lock"></i>
+                <span>الأمان</span>
+            </div>
+        </nav>
     </div>
 
     <script>
         const GAS_DEPLOY_URL = "https://script.google.com/macros/s/AKfycbxV86rV1t5Xr5CMWDUyX1qjwuW0jo0T2QUJvM1Ka2YMtNOcDECBaFMEHNgAXW1bxEwa/exec";
 
+        const loader = document.getElementById('loader');
+        const iframe = document.getElementById('mainIframe');
+        const appLayout = document.getElementById('appLayout');
+        const errorContainer = document.getElementById('errorContainer');
+        const headerTitle = document.getElementById('header-title');
+
+        function navigateTo(mode) {
+            showLoader();
+
+            const titles = {
+                'admin_dashboard': 'إحصائيات النظام',
+                'admin_results': 'نتائج اختبارات الطالبات',
+                'ad_change_password': 'تغيير كلمة مرور'
+            };
+
+            headerTitle.innerText = titles[mode] || "نظام الإدارة";
+
+            document.querySelectorAll('.nav-link, .mobile-btn').forEach(el => el.classList.remove('active'));
+
+            const key = mode.includes('dashboard') ? 'dashboard' : mode.includes('results') ? 'results' : 'password';
+            document.getElementById('link-' + key).classList.add('active');
+            document.getElementById('m-link-' + key).classList.add('active');
+
+            iframe.src = GAS_DEPLOY_URL + "?mode=" + mode;
+        }
+
+        function showLoader() {
+            loader.style.display = 'flex';
+            loader.style.opacity = '1';
+        }
+
+        iframe.onload = function () {
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }, 300);
+        };
+
         window.onload = function () {
             const fullUrl = window.location.href.toLowerCase();
-            const iframe = document.getElementById('mainIframe');
-            const loader = document.getElementById('loader');
-            const errorContainer = document.getElementById('errorContainer');
 
-            let mode = "";
-            if (fullUrl.includes('hifz')) mode = "hifz";
-            else if (fullUrl.includes('sharh')) mode = "sharh";
-
-            let admin_mode = "";
-            if (fullUrl.includes('ad_change_password')) admin_mode = "ad_change_password";
-            else if (fullUrl.includes('admin_results')) admin_mode = "admin_results";
-            else if (fullUrl.includes('admin_dashboard')) admin_mode = "admin_dashboard";
-            else if (fullUrl.includes('admin_teacher')) admin_mode = "admin_teacher";
-
-            if (mode !== "") {
+            if (fullUrl.includes('hifz') || fullUrl.includes('sharh')) {
+                const mode = fullUrl.includes('hifz') ? 'hifz' : 'sharh';
+                document.body.classList.add('fullscreen-mode');
+                appLayout.style.display = 'flex';
                 iframe.src = GAS_DEPLOY_URL + "?lajna=" + mode;
-
-                iframe.onload = function () {
-                    loader.style.transition = "opacity 0.6s ease";
-                    loader.style.opacity = "0";
-                    setTimeout(() => {
-                        loader.style.display = 'none';
-                        iframe.style.display = 'block';
-                    }, 600);
-                };
             }
-            else if (admin_mode !== "") {
-                iframe.src = GAS_DEPLOY_URL + "?mode=" + admin_mode;
 
-                iframe.onload = function () {
-                    loader.style.transition = "opacity 0.6s ease";
-                    loader.style.opacity = "0";
-                    setTimeout(() => {
-                        loader.style.display = 'none';
-                        iframe.style.display = 'block';
-                    }, 600);
-                };
+            else if (fullUrl.includes('admin_dashboard') || fullUrl.includes('admin_results') || fullUrl.includes('ad_change_password')) {
+                appLayout.style.display = 'flex';
+                let startMode = 'admin_dashboard';
+                if (fullUrl.includes('admin_results')) startMode = 'admin_results';
+                if (fullUrl.includes('ad_change_password')) startMode = 'ad_change_password';
+                navigateTo(startMode);
             }
+            // else if (fullUrl.endsWith('index.html') || fullUrl.endsWith('/')) {
+            //     appLayout.style.display = 'flex';
+            //     navigateTo('admin_dashboard');
+            // }
             else {
                 loader.style.display = 'none';
                 errorContainer.style.display = 'flex';
