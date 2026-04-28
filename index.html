@@ -134,6 +134,9 @@
             let mode = "";
             if (fullUrl.includes('hifz')) mode = "hifz";
             else if (fullUrl.includes('sharh')) mode = "sharh";
+            
+            let re_mode = "";
+            if (fullUrl.includes('students_results')) re_mode = "students_results";
 
             let admin_mode = "";
             if (fullUrl.includes('ad_change_password')) admin_mode = "ad_change_password";
@@ -143,6 +146,18 @@
 
             if (mode !== "") {
                 iframe.src = GAS_DEPLOY_URL + "?lajna=" + mode;
+
+                iframe.onload = function () {
+                    loader.style.transition = "opacity 0.6s ease";
+                    loader.style.opacity = "0";
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                        iframe.style.display = 'block';
+                    }, 600);
+                };
+            }
+            else if (re_mode !== "") {
+                iframe.src = GAS_DEPLOY_URL + "?results=" + re_mode;
 
                 iframe.onload = function () {
                     loader.style.transition = "opacity 0.6s ease";
