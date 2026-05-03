@@ -143,6 +143,7 @@
             else if (fullUrl.includes('admin_results')) admin_mode = "admin_results";
             else if (fullUrl.includes('admin_dashboard')) admin_mode = "admin_dashboard";
             else if (fullUrl.includes('admin_teacher')) admin_mode = "admin_teacher";
+            else if (fullUrl.includes('mosque_results')) admin_mode = "mosque_results";
 
             if (mode !== "") {
                 iframe.src = GAS_DEPLOY_URL + "?lajna=" + mode;
